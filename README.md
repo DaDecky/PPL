@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PPL Salman
 
-## Getting Started
+Next.js 16 + Prisma + Better Auth starter with email/password auth pages (`/sign-in`, `/sign-up`), session-aware homepage, shadcn/ui, and Sonner toasts.
 
-First, run the development server:
+## Developer Getting Started
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Create `.env` in project root:
+
+```env
+DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DB_NAME
+BETTER_AUTH_SECRET=your-32-plus-char-secret
+BETTER_AUTH_URL=http://localhost:3000
+```
+
+3. Generate Prisma client:
+
+```bash
+npx prisma generate
+```
+
+4. Apply migrations:
+
+```bash
+npx prisma migrate dev
+```
+
+5. Run dev server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+6. Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Auth Flow
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Sign up: `http://localhost:3000/sign-up`
+- Sign in: `http://localhost:3000/sign-in`
+- Homepage (`/`) shows:
+  - `Sign in` / `Sign up` buttons when logged out
+  - user email + `Log out` button when logged in
 
-## Learn More
+## Notes for Developers
 
-To learn more about Next.js, take a look at the following resources:
+- Better Auth server config: `src/lib/auth.ts`
+- Better Auth client helpers: `src/lib/auth-client.ts`
+- Toast wrapper (info/warning/success/error): `src/lib/toast.ts`
+- Sonner toaster styling: `src/components/ui/sonner.tsx`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Prisma client is also generated automatically on `npm install` via `postinstall`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+If you change Prisma schema (including Better Auth tables), run:
 
-## Deploy on Vercel
+```bash
+npx prisma generate
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+If you change Prisma schema and need to update the database structure, create a migration with a clear message:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npx prisma migrate dev --name your_migration_message
+```
+
+Examples:
+
+```bash
+npx prisma migrate dev --name add_profile_table
+npx prisma migrate dev --name add_email_verified_index
+```
+
+If you see error like `Model user does not exist in the database`, usually fix with:
+
+```bash
+npx prisma generate
+npm run dev
+```
