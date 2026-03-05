@@ -23,6 +23,9 @@ const signUpSchema = z
   .object({
     name: z.string().min(2, "Nama minimal 2 karakter"),
     email: z.email("Email tidak valid"),
+    phoneNumber: z
+      .string()
+      .regex(/^8[0-9]{7,12}$/, "No. Handphone tidak valid"),
     password: z.string().min(8, "Password minimal 8 karakter"),
     confirmPassword: z.string().min(8, "Konfirmasi password minimal 8 karakter"),
   })
@@ -44,6 +47,7 @@ export default function SignUpPage() {
     defaultValues: {
       name: "",
       email: "",
+      phoneNumber: "",
       password: "",
       confirmPassword: "",
     },
@@ -51,13 +55,16 @@ export default function SignUpPage() {
 
   const onSubmit = async (values: SignUpFormValues) => {
     const base = window.location.origin;
+    const payload = {
+      name: values.name,
+      email: values.email,
+      phoneNumber: `+62${values.phoneNumber}`,
+      password: values.password,
+      callbackURL: `${base}/`,
+    } as Parameters<typeof signUp.email>[0] & { phoneNumber: string };
+
     await signUp.email(
-      {
-        name: values.name,
-        email: values.email,
-        password: values.password,
-        callbackURL: `${base}/`,
-      },
+      payload,
       {
         onSuccess: () => {
           appToast.success("Berhasil sign up");
@@ -100,6 +107,33 @@ export default function SignUpPage() {
               />
               {errors.email?.message ? (
                 <p className="text-sm text-destructive">{errors.email.message}</p>
+              ) : null}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="phoneNumber">No. Handphone</Label>
+              <div className="flex items-center rounded-md border border-input bg-background">
+                <span className="border-r border-input px-3 py-2 text-sm text-muted-foreground">
+                  +62
+                </span>
+                <Input
+                  id="phoneNumber"
+                  type="tel"
+                  autoComplete="tel-national"
+                  placeholder="81234567890"
+                  className="border-0 shadow-none focus-visible:ring-0"
+                  {...register("phoneNumber", {
+                    setValueAs: (value) =>
+                      String(value ?? "")
+                        .replace(/\D/g, "")
+                        .replace(/^0+/, ""),
+                  })}
+                />
+              </div>
+              {errors.phoneNumber?.message ? (
+                <p className="text-sm text-destructive">
+                  {errors.phoneNumber.message}
+                </p>
               ) : null}
             </div>
 

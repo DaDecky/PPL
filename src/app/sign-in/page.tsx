@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,14 +20,14 @@ import {
 } from "@/components/ui/card";
 
 const signInSchema = z.object({
-  email: z.email("Email tidak valid"),
+  identifier: z.string().min(1, "Email / no.hp wajib diisi"),
   password: z.string().min(8, "Password minimal 8 karakter"),
 });
 
 type SignInFormValues = z.infer<typeof signInSchema>;
 
 export default function SignInPage() {
-  const router = useRouter();
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -35,26 +35,49 @@ export default function SignInPage() {
   } = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
-      email: "",
+      identifier: "",
       password: "",
     },
   });
 
   const onSubmit = async (values: SignInFormValues) => {
     const base = window.location.origin;
-    await signIn.email(
-      {
-        email: values.email,
+    const res = await fetch("/api/auth/sign-in-identifier", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        identifier: values.identifier,
         password: values.password,
+        callbackURL: `${base}/`,
+      }),
+    });
+
+    if (!res.ok) {
+      const data = (await res.json().catch(() => null)) as
+        | { message?: string }
+        | null;
+      appToast.error(data?.message ?? "Email/no.hp atau password salah.");
+      return;
+    }
+
+    // We use a custom sign-in endpoint, so do a full reload to sync auth state immediately.
+    window.location.assign("/");
+  };
+
+  const onGoogleSignIn = async () => {
+    setIsGoogleLoading(true);
+    const base = window.location.origin;
+    await signIn.social(
+      {
+        provider: "google",
         callbackURL: `${base}/`,
       },
       {
-        onSuccess: () => {
-          appToast.success("Berhasil sign in");
-          router.push("/");
-        },
         onError: (ctx) => {
           appToast.error(ctx.error.message);
+          setIsGoogleLoading(false);
         },
       },
     );
@@ -72,16 +95,18 @@ export default function SignInPage() {
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="identifier">Email / No. Handphone</Label>
               <Input
-                id="email"
-                type="email"
-                autoComplete="email"
-                placeholder="you@example.com"
-                {...register("email")}
+                id="identifier"
+                type="text"
+                autoComplete="username"
+                placeholder="you@example.com / 081234567890"
+                {...register("identifier")}
               />
-              {errors.email?.message ? (
-                <p className="text-sm text-destructive">{errors.email.message}</p>
+              {errors.identifier?.message ? (
+                <p className="text-sm text-destructive">
+                  {errors.identifier.message}
+                </p>
               ) : null}
             </div>
 
@@ -103,6 +128,18 @@ export default function SignInPage() {
               {isSubmitting ? "Signing in..." : "Sign in"}
             </Button>
           </form>
+
+          <div className="my-4 h-px bg-border" />
+
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={onGoogleSignIn}
+            disabled={isGoogleLoading}
+          >
+            {isGoogleLoading ? "Redirecting..." : "Continue with Google"}
+          </Button>
 
           <p className="mt-4 text-sm text-muted-foreground">
             Belum punya akun?{" "}
