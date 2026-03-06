@@ -1,65 +1,63 @@
-@startuml Sistem Infak & Filantropi — Rumah Amal Salman
+@startuml Use Case Diagram
+left to right direction
+
 ' =====================
 ' ACTORS
 ' =====================
 actor "TAMU"  as TAMU
 actor "USER"  as USER
 actor "ADMIN" as ADMIN
-actor "DEVELOPER" as DEV
 
 ' =====================
 ' SYSTEM BOUNDARY
 ' =====================
 rectangle "Sistem Infak & Filantropi — Rumah Amal Salman" {
 
-    package "Autentikasi & Profil" as AUTH {
-        usecase "UC-01\nRegistrasi Akun"              as UC01
+        ' --- KOLOM KIRI (Tamu & User Usecases) ---
+        together {
+                usecase "UC-01\nRegistrasi Akun"              as UC01
+                usecase "UC-04\nDonasi Anonim"                as UC04
+                usecase "UC-17\nManajemen Profil"             as UC17
+                usecase "UC-03\nDonasi Terautentikasi"        as UC03
+                usecase "UC-05\nPengajuan Pinjaman"           as UC05
+                usecase "UC-08\nPenyetujuan SPK"              as UC08
+                usecase "UC-10\nPembayaran Cicilan"           as UC10
+                usecase "UC-11\nLihat Riwayat Cicilan"        as UC11
+                usecase "UC-12\nReminder Tagihan"             as UC12
+                usecase "UC-13\nLihat Transparansi Dana"      as UC13
+                usecase "UC-15\nLihat Laporan Cash Flow Pribadi" as UC15
+        }
+
+        ' --- TENGAH (Shared Usecase) ---
         usecase "UC-02\nAutentikasi Login/Logout"     as UC02
-        usecase "UC-17\nManajemen Profil"             as UC17
-    }
 
-    package "Donasi" as DON {
-        usecase "UC-03\nDonasi Terautentikasi"        as UC03
-        usecase "UC-04\nDonasi Anonim"                as UC04
-    }
+        ' --- KOLOM KANAN (Admin Usecases) ---
+        together {
+                usecase "UC-06\nVerifikasi Pengajuan Pinjaman" as UC06
+                usecase "UC-07\nPenerbitan SPK"               as UC07
+                usecase "UC-09\nPantau Status Pencairan Dana" as UC09
+                usecase "UC-14\nLihat Dashboard Admin"        as UC14
+                usecase "UC-16\nLihat Laporan Cash Flow Keseluruhan" as UC16
+        }
 
-    package "Alur Pinjaman" as PIN {
-        usecase "UC-05\nPengajuan Pinjaman"           as UC05
-        usecase "UC-06\nVerifikasi Pengajuan Pinjaman" as UC06
-        usecase "UC-07\nPenerbitan SPK"               as UC07
-        usecase "UC-08\nPenyetujuan SPK"              as UC08
-        usecase "UC-09\nPantau Status Pencairan Dana" as UC09
-    }
-
-    package "Cicilan" as CIC {
-        usecase "UC-10\nPembayaran Cicilan"           as UC10
-        usecase "UC-11\nLihat Riwayat Cicilan"        as UC11
-        usecase "UC-12\nReminder Tagihan"             as UC12
-    }
-
-    package "Laporan & Transparansi" as LAP {
-        usecase "UC-13\nLihat Transparansi Dana"           as UC13
-        usecase "UC-14\nLihat Dashboard Admin"             as UC14
-        usecase "UC-15\nLihat Laporan Cash Flow Pribadi"   as UC15
-        usecase "UC-16\nLihat Laporan Cash Flow Keseluruhan" as UC16
-    }
-
-    package "Setup Teknis" as TEK {
-        usecase "UC-18\nInisialisasi Repository Git"       as UC18
-        usecase "UC-19\nDesain Sistem Perangkat Lunak"     as UC19
-        usecase "UC-20\nDesain Struktur Database"          as UC20
-    }
+        ' --- INVISIBLE LINKS UNTUK MEMAKSA LAYOUT KOLOM ---
+        ' Ini mendorong grup kanan agar posisinya sejajar di sebelah kanan grup kiri
+        UC01 -[hidden]-> UC06
+        UC05 -[hidden]-> UC07
+        UC10 -[hidden]-> UC09
+        UC13 -[hidden]-> UC14
+        UC15 -[hidden]-> UC16
 }
 
 ' =====================
 ' ASSOCIATIONS
 ' =====================
 
-' TAMU
+' TAMU (Posisi Kiri)
 TAMU --> UC01
 TAMU --> UC04
 
-' USER
+' USER (Posisi Kiri)
 USER --> UC02
 USER --> UC03
 USER --> UC05
@@ -71,18 +69,13 @@ USER --> UC13
 USER --> UC15
 USER --> UC17
 
-' ADMIN
-ADMIN --> UC02
-ADMIN --> UC06
-ADMIN --> UC07
-ADMIN --> UC09
-ADMIN --> UC14
-ADMIN --> UC16
-
-' DEVELOPER
-DEV --> UC18
-DEV --> UC19
-DEV --> UC20
+' ADMIN (Posisi Kanan) -> Panah dibalik agar Admin tetap di kanan
+UC02 <-- ADMIN
+UC06 <-- ADMIN
+UC07 <-- ADMIN
+UC09 <-- ADMIN
+UC14 <-- ADMIN
+UC16 <-- ADMIN
 
 ' =====================
 ' INCLUDE RELATIONSHIPS
@@ -95,6 +88,12 @@ UC11 .> UC02 : «include»
 UC13 .> UC02 : «include»
 UC15 .> UC02 : «include»
 UC17 .> UC02 : «include»
+
+UC06 .> UC02 : «include»
+UC14 .> UC02 : «include»
+UC16 .> UC02 : «include»
+UC09 .> UC02 : «include»
+
 
 ' =====================
 ' EXTEND RELATIONSHIPS
