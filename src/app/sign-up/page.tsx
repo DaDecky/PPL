@@ -75,8 +75,8 @@ export default function SignUpPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#f8f8f8]">
-      <div className="grid min-h-screen grid-cols-1 lg:grid-cols-[1.48fr_1fr]">
+    <main className="min-h-screen bg-white">
+      <div className="grid min-h-screen grid-cols-1 lg:grid-cols-[1.45fr_1fr]">
         <section className="relative hidden lg:block">
           <Image
             src="/bg-rumah-amal-salman.png"
@@ -87,7 +87,7 @@ export default function SignUpPage() {
           />
         </section>
 
-        <section className="flex min-h-screen items-start justify-center bg-[#fafafa] px-8 py-12 lg:px-12">
+        <section className="flex min-h-screen items-start justify-center bg-white px-8 py-10 lg:px-12">
           <div className="w-full max-w-87.5 pt-8 lg:pt-10">
             <div className="mb-10 flex flex-col items-center">
               <Image
@@ -99,10 +99,10 @@ export default function SignUpPage() {
                 className="mb-8 h-auto w-50"
               />
 
-              <h1 className="text-center text-[28px] font-bold leading-tight text-[#1f2937]">
+              <h1 className="text-center text-[28px] font-bold leading-tight text-slate-800">
                 Buat Akun Baru
               </h1>
-              <p className="mt-3 text-center text-[15px] text-[#9ca3af]">
+              <p className="mt-3 text-center text-[15px] text-slate-500">
                 Isi data diri Anda untuk mendaftar
               </p>
             </div>
@@ -111,14 +111,14 @@ export default function SignUpPage() {
               <div className="space-y-2">
                 <Label
                   htmlFor="name"
-                  className="text-[15px] font-semibold text-[#4b5563]"
+                  className="text-[15px] font-semibold text-slate-600"
                 >
                   Nama Lengkap
                 </Label>
                 <Input
                   id="name"
                   placeholder="Masukkan nama lengkap"
-                  className="h-11.5 rounded-2xl border border-[#e5e7eb] bg-white px-4 text-[15px] shadow-none placeholder:text-[#b6bdc7] focus-visible:ring-1 focus-visible:ring-[#1bb4c8]"
+                  className="h-11.5 rounded-2xl border border-slate-200 bg-white px-4 text-[15px] shadow-none placeholder:text-[#b6bdc7] focus-visible:ring-1 focus-visible:ring-[#18b6c9]"
                   {...register("name")}
                 />
                 {errors.name?.message ? (
@@ -129,7 +129,7 @@ export default function SignUpPage() {
               <div className="space-y-2">
                 <Label
                   htmlFor="email"
-                  className="text-[15px] font-semibold text-[#4b5563]"
+                  className="text-[15px] font-semibold text-slate-600"
                 >
                   Email
                 </Label>
@@ -138,7 +138,7 @@ export default function SignUpPage() {
                   type="email"
                   autoComplete="email"
                   placeholder="Masukkan alamat email"
-                  className="h-11.5 rounded-2xl border border-[#e5e7eb] bg-white px-4 text-[15px] shadow-none placeholder:text-[#b6bdc7] focus-visible:ring-1 focus-visible:ring-[#1bb4c8]"
+                  className="h-11.5 rounded-2xl border border-slate-200 bg-white px-4 text-[15px] shadow-none placeholder:text-[#b6bdc7] focus-visible:ring-1 focus-visible:ring-[#18b6c9]"
                   {...register("email")}
                 />
                 {errors.email?.message ? (
@@ -149,13 +149,13 @@ export default function SignUpPage() {
               <div className="space-y-2">
                 <Label
                   htmlFor="phoneNumber"
-                  className="text-[15px] font-semibold text-[#4b5563]"
+                  className="text-[15px] font-semibold text-slate-600"
                 >
                   No. Handphone
                 </Label>
 
                 <div className="flex h-11.5 items-center gap-2">
-                  <div className="flex h-full w-14 items-center justify-center rounded-2xl border border-[#e5e7eb] bg-white text-[15px] font-medium text-[#6b7280]">
+                  <div className="flex h-full w-14 items-center justify-center rounded-2xl border border-slate-200 bg-white text-[15px] font-medium text-[#6b7280]">
                     +62
                   </div>
 
@@ -164,7 +164,7 @@ export default function SignUpPage() {
                     type="tel"
                     autoComplete="tel-national"
                     placeholder="8xx-xxxx-xxxx"
-                    className="h-full flex-1 rounded-2xl border border-[#e5e7eb] bg-white px-4 text-[15px] shadow-none placeholder:text-[#b6bdc7] focus-visible:ring-1 focus-visible:ring-[#1bb4c8]"
+                    className="h-full flex-1 rounded-2xl border border-slate-200 bg-white px-4 text-[15px] shadow-none placeholder:text-[#b6bdc7] focus-visible:ring-1 focus-visible:ring-[#18b6c9]"
                     {...register("phoneNumber", {
                       setValueAs: (value) =>
                         String(value ?? "")
@@ -184,7 +184,7 @@ export default function SignUpPage() {
               <div className="space-y-2">
                 <Label
                   htmlFor="password"
-                  className="text-[15px] font-semibold text-[#4b5563]"
+                  className="text-[15px] font-semibold text-slate-600"
                 >
                   Password
                 </Label>
@@ -195,13 +195,13 @@ export default function SignUpPage() {
                     type={showPassword ? "text" : "password"}
                     autoComplete="new-password"
                     placeholder="Buat password"
-                    className="h-11.5 rounded-2xl border border-[#e5e7eb] bg-white px-4 pr-12 text-[15px] shadow-none placeholder:text-[#b6bdc7] focus-visible:ring-1 focus-visible:ring-[#1bb4c8]"
+                    className="h-11.5 rounded-2xl border border-slate-200 bg-white px-4 pr-12 text-[15px] shadow-none placeholder:text-[#b6bdc7] focus-visible:ring-1 focus-visible:ring-[#18b6c9]"
                     {...register("password")}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword((prev) => !prev)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9ca3af]"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500"
                     aria-label={showPassword ? "Sembunyikan password" : "Lihat password"}
                   >
                     {showPassword ? (
@@ -220,7 +220,7 @@ export default function SignUpPage() {
               <div className="space-y-2">
                 <Label
                   htmlFor="confirmPassword"
-                  className="text-[15px] font-semibold text-[#4b5563]"
+                  className="text-[15px] font-semibold text-slate-600"
                 >
                   Konfirmasi Password
                 </Label>
@@ -231,13 +231,13 @@ export default function SignUpPage() {
                     type={showConfirmPassword ? "text" : "password"}
                     autoComplete="new-password"
                     placeholder="Ulangi password"
-                    className="h-11.5 rounded-2xl border border-[#e5e7eb] bg-white px-4 pr-12 text-[15px] shadow-none placeholder:text-[#b6bdc7] focus-visible:ring-1 focus-visible:ring-[#1bb4c8]"
+                    className="h-11.5 rounded-2xl border border-slate-200 bg-white px-4 pr-12 text-[15px] shadow-none placeholder:text-[#b6bdc7] focus-visible:ring-1 focus-visible:ring-[#18b6c9]"
                     {...register("confirmPassword")}
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword((prev) => !prev)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9ca3af]"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500"
                     aria-label={
                       showConfirmPassword
                         ? "Sembunyikan konfirmasi password"
@@ -261,11 +261,11 @@ export default function SignUpPage() {
 
               <p className="pt-1 text-center text-[12px] leading-5 text-[#a3aab5]">
                 Dengan mendaftar, Anda menyetujui{" "}
-                <Link href="/syarat-ketentuan" className="font-semibold text-[#1bb4c8]">
+                <Link href="/syarat-ketentuan" className="font-semibold text-[#18b6c9]">
                   Syarat & Ketentuan
                 </Link>{" "}
                 serta{" "}
-                <Link href="/kebijakan-privasi" className="font-semibold text-[#1bb4c8]">
+                <Link href="/kebijakan-privasi" className="font-semibold text-[#18b6c9]">
                   Kebijakan Privasi
                 </Link>{" "}
                 kami.
@@ -274,7 +274,7 @@ export default function SignUpPage() {
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="mt-2 h-12 w-full rounded-2xl bg-[#1bb4c8] text-[15px] font-semibold text-white shadow-none hover:bg-[#17a9bc]"
+                className="mt-2 h-12 w-full rounded-2xl bg-[#18b6c9] text-[15px] font-semibold text-white shadow-none hover:bg-[#17a9bc]"
               >
                 {isSubmitting ? "Mendaftar..." : "Daftar Sekarang"}
               </Button>
@@ -282,7 +282,7 @@ export default function SignUpPage() {
 
             <p className="mt-8 text-center text-[15px] text-[#8f96a3]">
               Sudah punya akun?{" "}
-              <Link href="/sign-in" className="font-semibold text-[#1bb4c8]">
+              <Link href="/sign-in" className="font-semibold text-[#18b6c9]">
                 Masuk
               </Link>
             </p>

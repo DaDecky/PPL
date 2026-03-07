@@ -69,7 +69,7 @@ export default function SignInPage() {
 
         {/* Right Form */}
         <section className="flex min-h-screen items-center justify-center bg-white px-6 py-10">
-          <div className="w-full max-w-[420px]">
+          <div className="w-full max-w-87.5">
             <div className="mb-8 flex justify-center">
               <Image
                 src="/logo.png"
@@ -77,7 +77,7 @@ export default function SignInPage() {
                 width={180}
                 height={60}
                 priority
-                className="h-auto w-[180px]"
+                className="mb-8 h-auto w-50"
               />
             </div>
 
@@ -128,11 +128,7 @@ export default function SignInPage() {
                     onClick={() => setShowPassword((v) => !v)}
                     className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"
                   >
-                    {showPassword ? (
-                      <EyeOff size={18} />
-                    ) : (
-                      <Eye size={18} />
-                    )}
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                 </div>
 
