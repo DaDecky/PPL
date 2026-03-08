@@ -80,3 +80,31 @@ If you see error like `Model user does not exist in the database`, usually fix w
 npx prisma generate
 npm run dev
 ```
+
+## Vercel Deployment
+
+If Vercel uses a different, fresh database from development, Prisma migrations will not apply automatically unless you run them during deploy.
+
+Set these environment variables in Vercel:
+
+```env
+DATABASE_URL=
+BETTER_AUTH_SECRET=
+BETTER_AUTH_URL=https://your-production-domain
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+```
+
+Use this Vercel build command:
+
+```bash
+npm run vercel-build
+```
+
+`vercel-build` runs:
+
+```bash
+prisma migrate deploy && next build
+```
+
+This applies committed migrations to the production database before building the app.
