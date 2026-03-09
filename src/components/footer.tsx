@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -64,7 +65,6 @@ function FooterBrand() {
         width={224}
         height={56}
         className="h-auto w-56 max-w-full"
-        priority={false}
       />
       <p className="max-w-[213px] text-sm leading-relaxed text-muted-foreground">
         rumahamal.org adalah website untuk berzakat, infaq, wakaf dan menggalang
@@ -81,15 +81,15 @@ function FooterLinks() {
       <ul className="space-y-2 text-sm leading-relaxed">
         {LEARN_MORE_LINKS.map((link) => (
           <li key={link.label}>
-            <a
+            <Link
               href={link.href}
               className={cn(
-                "transition-colors hover:text-[#07b0c8]",
-                link.highlighted ? "text-[#07b0c8]" : "text-muted-foreground"
+                "transition-colors hover:text-brand-hover",
+                link.highlighted ? "text-brand" : "text-muted-foreground"
               )}
             >
               {link.label}
-            </a>
+            </Link>
           </li>
         ))}
       </ul>
@@ -107,7 +107,7 @@ function FooterContact() {
         ))}
         <a
           href={`mailto:${CONTACT_EMAIL}`}
-          className="block text-[#07b0c8] transition-colors hover:text-[#0596aa]"
+          className="block text-brand transition-colors hover:text-brand-hover"
         >
           {CONTACT_EMAIL}
         </a>
@@ -132,7 +132,7 @@ function FooterMap() {
         href={MAP_CONFIG.linkUrl}
         target="_blank"
         rel="noreferrer"
-        className="inline-flex items-center gap-1 text-xs text-[#07b0c8] transition-colors hover:text-[#0596aa]"
+        className="inline-flex items-center gap-1 text-xs text-brand transition-colors hover:text-brand-hover"
       >
         Lihat peta lebih besar
         <ArrowUpRight className="size-3" strokeWidth={2.25} />
