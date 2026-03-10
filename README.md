@@ -10,33 +10,47 @@ Next.js 16 + Prisma + Better Auth starter with email/password auth pages (`/sign
 npm install
 ```
 
-2. Create `.env` in project root:
+2. If you want a local PostgreSQL 17 database, start Docker Compose:
 
-```env
-DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DB_NAME
-BETTER_AUTH_SECRET=your-32-plus-char-secret
-BETTER_AUTH_URL=http://localhost:3000
+```bash
+docker compose up -d
 ```
 
-3. Generate Prisma client:
+3. Create `.env` in project root from the example:
+
+```bash
+cp .env.example .env
+```
+
+Default local Docker database connection:
+
+```env
+DATABASE_URL=postgresql://postgres:postgres@localhost:5532/ppl_salman
+BETTER_AUTH_SECRET=your-32-plus-char-secret
+BETTER_AUTH_URL=http://localhost:3000
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+```
+
+4. Generate Prisma client:
 
 ```bash
 npx prisma generate
 ```
 
-4. Apply migrations:
+5. Apply migrations:
 
 ```bash
 npx prisma migrate dev
 ```
 
-5. Run dev server:
+6. Run dev server:
 
 ```bash
 npm run dev
 ```
 
-6. Open `http://localhost:3000`.
+7. Open `http://localhost:3000`.
 
 ## Auth Flow
 
@@ -54,6 +68,8 @@ npm run dev
 - Sonner toaster styling: `src/components/ui/sonner.tsx`
 
 Prisma client is also generated automatically on `npm install` via `postinstall`.
+
+Local PostgreSQL container config lives in `docker-compose.yml` and uses PostgreSQL 17.
 
 If you change Prisma schema (including Better Auth tables), run:
 
