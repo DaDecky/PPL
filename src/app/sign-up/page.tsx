@@ -17,8 +17,8 @@ import { Label } from "@/components/ui/label";
 
 const signUpSchema = z
   .object({
-    name: z.string().min(2, "Nama lengkap minimal 2 karakter"),
-    email: z.string().email("Email tidak valid"),
+    name: z.string().min(2, "Nama minimal 2 karakter"),
+    email: z.email("Email tidak valid"),
     phoneNumber: z
       .string()
       .regex(/^8[0-9]{7,12}$/, "No. Handphone tidak valid"),
@@ -54,7 +54,6 @@ export default function SignUpPage() {
 
   const onSubmit = async (values: SignUpFormValues) => {
     const base = window.location.origin;
-
     const payload = {
       name: values.name,
       email: values.email,
@@ -63,15 +62,18 @@ export default function SignUpPage() {
       callbackURL: `${base}/`,
     } as Parameters<typeof signUp.email>[0] & { phoneNumber: string };
 
-    await signUp.email(payload, {
-      onSuccess: () => {
-        appToast.success("Berhasil sign up");
-        router.push("/");
+    await signUp.email(
+      payload,
+      {
+        onSuccess: () => {
+          appToast.success("Berhasil sign up");
+          router.push("/");
+        },
+        onError: (ctx) => {
+          appToast.error(ctx.error.message);
+        },
       },
-      onError: (ctx) => {
-        appToast.error(ctx.error.message);
-      },
-    });
+    );
   };
 
   return (
