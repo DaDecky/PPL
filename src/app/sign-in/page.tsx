@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,38 +15,64 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 const signInSchema = z.object({
-  identifier: z.string().min(1, "Email atau No. Handphone wajib diisi"),
-  password: z.string().min(1, "Password wajib diisi"),
+  identifier: z.string().min(1, "Email / no.hp wajib diisi"),
+  password: z.string().min(8, "Password minimal 8 karakter"),
 });
 
 type SignInFormValues = z.infer<typeof signInSchema>;
 
 export default function SignInPage() {
-  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
+    defaultValues: {
+      identifier: "",
+      password: "",
+    },
   });
 
   const onSubmit = async (values: SignInFormValues) => {
-    await signIn.email(
-      {
-        email: values.identifier,
+    const base = window.location.origin;
+    const res = await fetch("/api/auth/sign-in-identifier", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        identifier: values.identifier,
         password: values.password,
-        callbackURL: "/",
+        callbackURL: `${base}/`,
+      }),
+    });
+
+    if (!res.ok) {
+      const data = (await res.json().catch(() => null)) as
+        | { message?: string }
+        | null;
+      appToast.error(data?.message ?? "Email/no.hp atau password salah.");
+      return;
+    }
+
+    window.location.assign("/");
+  };
+  
+  const onGoogleSignIn = async () => {
+    setIsGoogleLoading(true);
+    const base = window.location.origin;
+    await signIn.social(
+      {
+        provider: "google",
+        callbackURL: `${base}/`,
       },
       {
-        onSuccess: () => {
-          appToast.success("Berhasil masuk");
-          router.push("/");
-        },
         onError: (ctx) => {
           appToast.error(ctx.error.message);
+          setIsGoogleLoading(false);
         },
       },
     );
@@ -99,6 +124,7 @@ export default function SignInPage() {
                 <Input
                   placeholder="Masukkan email atau nomor HP"
                   className="h-12 rounded-2xl border-slate-200 px-4 focus-visible:ring-[#18b6c9]"
+                  autoComplete="email"
                   {...register("identifier")}
                 />
 
@@ -120,6 +146,7 @@ export default function SignInPage() {
                     type={showPassword ? "text" : "password"}
                     placeholder="Masukkan password"
                     className="h-12 rounded-2xl border-slate-200 px-4 pr-12 focus-visible:ring-[#18b6c9]"
+                    autoComplete="current-password"
                     {...register("password")}
                   />
 
@@ -176,6 +203,8 @@ export default function SignInPage() {
                 type="button"
                 variant="outline"
                 className="h-12 w-full rounded-2xl"
+                onClick={onGoogleSignIn}
+                disabled={isGoogleLoading}
               >
                 <Image
                   src="/svg.png"
@@ -184,7 +213,7 @@ export default function SignInPage() {
                   height={20}
                   className="object-cover"
                 />
-                Google
+                {isGoogleLoading ? "Redirecting..." : "Google"}
               </Button>
             </form>
 
